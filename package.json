@@ -2,7 +2,7 @@
   "name": "counter-app",
   "version": "0.0.1",
   "description": "It's just a counter webApp, that counts and stores the countings...",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "parcel src/app.html",
     "build": "parcel build src/app.html"
