@@ -1,23 +1,16 @@
 <template>
     <div class="app">
-        <pre>{{ counter.start }}
-{{ counter.end }}</pre>
-
         <div v-show="!counter.start">
             <ul>
-                <li v-for="item in items">{{ item.count }} - {{ item.start }} - {{ item.end }}</li>
+                <li v-for="(item, i) in items">{{ item.count }} - {{ item.start }} - {{ item.end }} <button @click="itemRemove(i)">remove</button> </li>
             </ul>
             <button @click="counterStart()">start!</button>
         </div>
-
         <div v-show="counter.start">
-
             <button @click="counterIncrease()">{{ counter.count }}</button>
             <button @click="counterStop()">Stop &amp; Save</button>
             <button @click="counterReset()">Cancel</button>
-
         </div>
-
     </div>
 </template>
 
@@ -36,25 +29,24 @@ const App = {
         };
     },
     name: "App",
-    methods: {
+    filters : {
 
+    },
+    methods: {
+        // Counter
         counterStart : function() {
-            console.log('start!');
             this.counter.start = Date.now();
         },
         counterIncrease : function() {
             this.counter.count++;
-            console.log('increase!');
         },
         counterStop : function() {
-            console.log('stop and save!');
             this.counter.end = Date.now();
             this.items.push(this.counter);
             this.counterReset();
             this.counterSave();
         },
         counterSave : function() {
-            console.log( JSON.stringify(this.items) );
             localStorage.setItem('counter-app-items', JSON.stringify(this.items));
         },
         counterReset : function() {
@@ -65,6 +57,10 @@ const App = {
             }
         },
 
+        // Items
+        itemRemove : function(id) {
+            this.items.splice(id, 1);
+        }
     },
     created() {}
 };

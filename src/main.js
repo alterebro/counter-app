@@ -6,5 +6,3 @@ const Main = new Vue({
     template: '<App/>',
     components: { App }
 });
-
-console.log('hello world!');
