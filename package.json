@@ -4,17 +4,31 @@
   "description": "It's just a counter webApp, that counts and stores the countings...",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel src/app.html",
+    "build": "parcel build src/app.html"
+  },
+  "alias": {
+      "vue": "./node_modules/vue/dist/vue.common.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alterebro/counter-app.git"
   },
   "keywords": [],
-  "author": "Jorge Moreno. moro.es (@alterebro)",
+  "author": "Jorge Moreno, moro.es (@alterebro)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alterebro/counter-app/issues"
   },
-  "homepage": "https://github.com/alterebro/counter-app#readme"
+  "homepage": "https://github.com/alterebro/counter-app#readme",
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.2",
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.5",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "dependencies": {
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4"
+  }
 }
