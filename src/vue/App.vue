@@ -11,12 +11,17 @@
                 <button @click="counterStart()">start!</button>
             </section>
             <section v-show="counter.start">
-                <button @click="counterIncrease()">{{ counter.count }}</button>
+                <div class="counter-count" @click="counterIncrease()">
+                    {{ counter.count }}
+                </div>
+                <button @click="counterIncrease()">+</button>
+                <button @click="counterDecrease()">-</button>
                 <button @click="counterStop()">Stop &amp; Save</button>
                 <button @click="counterReset()">Cancel</button>
             </section>
             <section v-show="view.settings">
                 <h2>Settings</h2>
+                <h3>{{ appName }} v{{ appVersion }}</h3>
                 <ul>
                     <li>Export data / Save DB</li>
                     <li>Import DB</li>
@@ -60,6 +65,10 @@ const App = {
         counterIncrease : function() {
             this.counter.count++;
         },
+        counterDecrease : function() {
+            this.counter.count--;
+            this.counter.count = (this.counter.count < 0) ? 0 : this.counter.count;
+        },
         counterStop : function() {
             this.counter.end = Date.now();
             this.items.push(this.counter);
@@ -93,7 +102,7 @@ export default App;
 $colorBg : #f7f7f7;
 $colorFg : #303030;
 $colorAlpha : #0062ee;
-$colorBeta : #03dac6;
+$colorBeta : #23a6fa;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -162,6 +171,20 @@ main {
 
 footer {
     padding: 1rem;
+}
+
+button {
+    background: $colorBeta;
+    color: $colorBg;
+    border: none;
+    padding: .5rem 2rem;
+    border-radius: .3rem;
+    cursor: pointer;
+}
+
+
+.counter-count {
+    font-size: 9.6rem;
 }
 
 </style>
