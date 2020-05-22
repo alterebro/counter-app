@@ -10,8 +10,8 @@
                 <h2>Settings</h2>
                 <h3>{{ appName }} v{{ appVersion }}</h3>
                 <ul>
-                    <li>Export data / Save DB</li>
-                    <li>Import DB</li>
+                    <li><a :href="dbURL" download="db.txt" @click="dbExport()">Export data / Save DB</a></li>
+                    <li><input type="file" @change="dbImport" accept=".txt">Import DB</li>
                 </ul>
                 <hr />
                 <p>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></p>
@@ -83,7 +83,8 @@ const App = {
                 start : false,
                 end: false
             },
-            db : JSON.parse(localStorage.getItem('counter-app-items')) || placeholderData
+            db : JSON.parse(localStorage.getItem('counter-app-items')) || placeholderData,
+            dbURL : '#db'
         };
     },
     name: "App",
@@ -146,6 +147,36 @@ const App = {
         // DB
         dbSave : function() {
             localStorage.setItem('counter-app-items', JSON.stringify(this.db));
+        },
+        dbExport : function() {
+
+            let _db = JSON.stringify(this.db);
+            let _blob = new Blob([_db], {type: "text/plain;charset=utf-8"});
+            let _url = window.URL.createObjectURL(_blob);
+            this.dbURL = _url;
+
+            return true;
+            // window.URL.revokeObjectURL(_url);
+        },
+        dbImport : function(ev) {
+
+            let _file = ev.target.files[0];
+            let _reader = new FileReader();
+                _reader.readAsText(_file);
+                _reader.onload = (e) => {
+                    let _db = JSON.parse(e.target.result);
+                        _db.forEach((item, i) => {
+                            if (!(( !!item.name && typeof(item.name) === 'string' ) && ( !!item.elements && Array.isArray(item.elements) ))) {
+                                _db = false;
+                            }
+                        });
+
+                    if (_db) {
+                        this.db = _db;
+                        this.dbSave();
+                        this.changeView('/');
+                    }
+                }
         },
 
         // Items
