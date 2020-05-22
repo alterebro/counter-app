@@ -1,23 +1,41 @@
 <template>
     <div class="app">
         <header>
-            <h1>{{ appName }}</h1>
-            <button @click="changeView('settings')">Settings</button>
+            <h1 @click="changeView('/')">{{ appName }}</a></h1>
+            <button @click="changeView('/settings')">&equiv;</button>
         </header>
-        <main>
+
+        <main v-show="currentView.settings">
+            <section>
+                <h2>Settings</h2>
+                <h3>{{ appName }} v{{ appVersion }}</h3>
+                <ul>
+                    <li>Export data / Save DB</li>
+                    <li>Import DB</li>
+                </ul>
+                <hr />
+                <p>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></p>
+            </section>
+        </main>
+
+        <main v-show="currentView.app">
             <section v-show="!counter.start">
                 <ul>
                     <li v-for="(group, g) in db">
+                        <button @click="groupRemove(g)">&times;</button>
+                        <button @click="groupEdit(g)">&hellip;</button>
                         <strong>{{ group.name }}</strong>
                         <button @click="counterStart(g)">start!</button>
-
                         <ul>
                             <li v-for="(item, i) in group.elements">
-                            <strong>{{ item.count }}</strong> - {{ item.start | startTime }} ({{ item.end | endTime(item.start) }}) <button @click="itemRemove(g, i)">remove</button>
+                                <button @click="itemRemove(g, i)">&times;</button>
+                                <button @click="itemEdit(g, i)">&hellip;</button>
+                                {{ item.start | startTime }} ({{ item.end | endTime(item.start) }}) &rarr; <strong>{{ item.count }}</strong>
                             </li>
                         </ul>
                     </li>
                 </ul>
+                <button @click="groupNew()">New Counter</button>
             </section>
             <section v-show="counter.start">
                 <div class="counter-count" @click="counterIncrease()">
@@ -27,16 +45,6 @@
                 <button @click="counterDecrease()">-</button>
                 <button @click="counterStop()">Stop &amp; Save</button>
                 <button @click="counterReset()">Cancel</button>
-            </section>
-            <section v-show="currentView == 'settings'">
-                <h2>Settings</h2>
-                <h3>{{ appName }} v{{ appVersion }}</h3>
-                <ul>
-                    <li>Export data / Save DB</li>
-                    <li>Import DB</li>
-                </ul>
-                <hr />
-                <p>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></p>
             </section>
         </main>
     </div>
@@ -67,7 +75,7 @@ const App = {
             appName: 'Counter App',
             appVersion : '0.0.1',
 
-            currentView : 'app',
+            currentView : {},
 
             currentCounter : 0,
             counter : {
@@ -76,7 +84,6 @@ const App = {
                 end: false
             },
             db : JSON.parse(localStorage.getItem('counter-app-items')) || placeholderData
-            // db : placeholderData
         };
     },
     name: "App",
@@ -92,9 +99,22 @@ const App = {
         }
 
     },
+
     methods: {
-        changeView : function(view) {
-            this.currentView = view;
+
+        changeView : function(path) {
+            console.log(path);
+            const paths = {
+                '/' : {
+                    app : true,
+                    settings : false
+                },
+                '/settings' : {
+                    app : false,
+                    settings : true
+                }
+            }
+            this.currentView = paths[path];
         },
 
         // Counter
@@ -129,12 +149,43 @@ const App = {
         },
 
         // Items
+        itemEdit : function(group, id) {
+            let _number = window.prompt('Count', this.db[group].elements[id].count );
+            if ( !isNaN(_number) ) {
+                this.db[group].elements[id].count = _number;
+                this.dbSave();
+            }
+        },
         itemRemove : function(group, id) {
             this.db[group].elements.splice(id, 1);
             this.dbSave();
+        },
+
+        // Groups
+        groupNew : function() {
+            let _timestamp = tinytime('{YYYY}.{Mo}.{DD}', { padMonth: true });
+            let _group = window.prompt('Name of the new counter', _timestamp.render( new Date() ) + ' Counter' );
+            this.db.push({
+                "name" : _group,
+                "elements" : []
+            });
+            this.dbSave();
+        },
+        groupEdit : function(group) {
+            let _name = window.prompt('Name of the counter', this.db[group].name );
+            this.db[group].name = _name;
+            this.dbSave();
+        },
+        groupRemove : function(group) {
+            if (window.confirm("Do you really want to remove the counter?")) {
+                this.db.splice(group, 1)
+            }
+            this.dbSave();
         }
     },
-    created() {}
+    created() {
+        this.changeView('/');
+    }
 };
 
 export default App;
@@ -206,6 +257,10 @@ header {
     h1 {
       font-weight: 400;
     }
+
+    a {
+        color: $colorBg;
+    }
 }
 main {
     padding: 1rem;
@@ -215,7 +270,8 @@ button {
     background: $colorBeta;
     color: $colorBg;
     border: none;
-    padding: .5rem 2rem;
+    padding: .5rem 1rem;
+    margin: .2rem;
     border-radius: .3rem;
     cursor: pointer;
 }
