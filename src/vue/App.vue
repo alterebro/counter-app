@@ -2,13 +2,22 @@
     <div class="app">
         <header>
             <h1>{{ appName }}</h1>
+            <button @click="changeView('settings')">Settings</button>
         </header>
         <main>
             <section v-show="!counter.start">
                 <ul>
-                    <li v-for="(item, i) in items">{{ item.count }} - {{ item.start }} - {{ item.end }} <button @click="itemRemove(i)">remove</button> </li>
+                    <li v-for="(group, g) in db">
+                        <strong>{{ group.name }}</strong>
+                        <button @click="counterStart(g)">start!</button>
+
+                        <ul>
+                            <li v-for="(item, i) in group.elements">
+                            <strong>{{ item.count }}</strong> - {{ item.start | startTime }} ({{ item.end | endTime(item.start) }}) <button @click="itemRemove(g, i)">remove</button>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
-                <button @click="counterStart()">start!</button>
             </section>
             <section v-show="counter.start">
                 <div class="counter-count" @click="counterIncrease()">
@@ -19,47 +28,78 @@
                 <button @click="counterStop()">Stop &amp; Save</button>
                 <button @click="counterReset()">Cancel</button>
             </section>
-            <section v-show="view.settings">
+            <section v-show="currentView == 'settings'">
                 <h2>Settings</h2>
                 <h3>{{ appName }} v{{ appVersion }}</h3>
                 <ul>
                     <li>Export data / Save DB</li>
                     <li>Import DB</li>
                 </ul>
+                <hr />
+                <p>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></p>
             </section>
         </main>
-        <footer>
-            <hr />
-            <p>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></p>
-        </footer>
     </div>
 </template>
 
 <script>
+import tinytime from 'tinytime';
+
+const placeholderData = [
+    {
+        "name" : "Diamond Push-Ups",
+        "elements" : [
+            {"count": 14, "start": 1589996663864, "end": 1589996675936 },
+            {"count": 11, "start": 1589996880494, "end": 1589996886459 }
+        ]
+    },{
+        "name" : "Knee Push-Ups",
+        "elements" : [
+            {"count": 22, "start": 1590159047784, "end": 1590159054556 },
+            {"count": 36, "start": 1590159102971, "end": 1590159114492 }
+        ]
+    }
+];
+
 const App = {
     data() {
         return {
             appName: 'Counter App',
             appVersion : '0.0.1',
-            view: {
-                settings : false
-            },
 
+            currentView : 'app',
+
+            currentCounter : 0,
             counter : {
                 count : 0,
                 start : false,
                 end: false
             },
-            items : JSON.parse(localStorage.getItem('counter-app-items')) || []
+            db : JSON.parse(localStorage.getItem('counter-app-items')) || placeholderData
+            // db : placeholderData
         };
     },
     name: "App",
     filters : {
 
+        startTime(value) {
+            let _timestamp = tinytime('{YYYY}.{Mo}.{DD}@{H}:{mm}', { padMonth: true });
+            return _timestamp.render( new Date(value) );
+        },
+        endTime(value, start) {
+            let _timestamp = tinytime('{mm}m{ss}s');
+            return _timestamp.render( new Date(value - start) );
+        }
+
     },
     methods: {
+        changeView : function(view) {
+            this.currentView = view;
+        },
+
         // Counter
-        counterStart : function() {
+        counterStart : function(id) {
+            this.currentCounter = id;
             this.counter.start = Date.now();
         },
         counterIncrease : function() {
@@ -71,12 +111,9 @@ const App = {
         },
         counterStop : function() {
             this.counter.end = Date.now();
-            this.items.push(this.counter);
+            this.db[this.currentCounter].elements.push(this.counter);
             this.counterReset();
-            this.counterSave();
-        },
-        counterSave : function() {
-            localStorage.setItem('counter-app-items', JSON.stringify(this.items));
+            this.dbSave();
         },
         counterReset : function() {
             this.counter = {
@@ -86,9 +123,15 @@ const App = {
             }
         },
 
+        // DB
+        dbSave : function() {
+            localStorage.setItem('counter-app-items', JSON.stringify(this.db));
+        },
+
         // Items
-        itemRemove : function(id) {
-            this.items.splice(id, 1);
+        itemRemove : function(group, id) {
+            this.db[group].elements.splice(id, 1);
+            this.dbSave();
         }
     },
     created() {}
@@ -101,8 +144,8 @@ export default App;
 
 $colorBg : #f7f7f7;
 $colorFg : #303030;
-$colorAlpha : #0062ee;
-$colorBeta : #23a6fa;
+$colorAlpha : #20325e;
+$colorBeta : #23466a;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -164,12 +207,7 @@ header {
       font-weight: 400;
     }
 }
-
 main {
-    padding: 1rem;
-}
-
-footer {
     padding: 1rem;
 }
 
@@ -185,6 +223,8 @@ button {
 
 .counter-count {
     font-size: 9.6rem;
+    user-select: none;
+    cursor: pointer;
 }
 
 </style>
