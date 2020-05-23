@@ -11,13 +11,16 @@
         <main v-show="currentView.settings">
             <section>
                 <h2>Settings</h2>
-                <h3>{{ appName }} v{{ appVersion }}</h3>
-                <ul>
-                    <li><a :href="dbURL" download="db.txt" @click="dbExport()">Export data / Save DB</a></li>
-                    <li><input type="file" @change="dbImport" accept=".txt">Import DB</li>
-                </ul>
+                <h3>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></h3>
                 <hr />
-                <p>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></p>
+                <h4>Export and export database file</h4>
+                <p><a :href="dbURL" download="db.txt" @click="dbExport()">Export data / Save DB</a></p>
+
+                <h4>Import data file (db.txt)</h4>
+                <p><input type="file" @change="dbImport" accept=".txt"></p>
+
+                <hr />
+                <p>{{ appName }} v{{ appVersion }} ( <em>build: {{ appBuild }}</em> )</p>
             </section>
         </main>
 
@@ -26,7 +29,10 @@
 
                 <dl>
                     <template v-for="(group, g) in db">
-                        <dt><strong>{{ group.name }}</strong></dt>
+                        <dt>
+                            <strong>{{ group.name }}</strong>
+                            <button @click="counterStart(g)">Count!</button>
+                        </dt>
                         <dd>
                             <ul>
                                 <li v-for="(day, d) in dbjson[g]">
@@ -51,7 +57,6 @@
                     <li v-for="(group, g) in db">
                         <details>
                             <summary>
-
                                 <strong>{{ group.name }}</strong>
                                 <button @click="counterStart(g)">start!</button>
                             </summary>
@@ -87,10 +92,13 @@
                 <div class="counter-count" @click="counterIncrease()">
                     {{ counter.count }}
                 </div>
-                <button @click="counterIncrease()"><i class="material-icons">add</i> Add</button>
-                <button @click="counterDecrease()"><i class="material-icons">remove</i> Remove</button>
-                <button @click="counterStop()"><i class="material-icons">save</i> Stop &amp; Save</button>
-                <button @click="counterReset()"><i class="material-icons">close</i> Cancel</button>
+                <div class="counter-buttons">
+                    <button @click="counterStop()"><i class="material-icons">save</i> &nbsp; Stop &amp; Save</button>
+                    <hr>
+                    <button @click="counterIncrease()"><i class="material-icons">add</i></button>
+                    <button @click="counterDecrease()"><i class="material-icons">remove</i></button>
+                    <button @click="counterReset()"><i class="material-icons">close</i></button>
+                </div>
             </section>
         </main>
     </div>
@@ -98,7 +106,7 @@
 
 <script>
 import tinytime from 'tinytime';
-import { version } from "../../version.json";
+import { version, build } from "../../version.json";
 
 const placeholderData = [
     {
@@ -121,6 +129,7 @@ const App = {
         return {
             appName: 'Counter App',
             appVersion : version,
+            appBuild : build,
 
             currentView : {},
 
@@ -413,20 +422,29 @@ button {
 
     .material-icons {
         font-size: 14px;
-        margin: 0 .5rem 0 0;
     }
 }
 
 
 .counter-count {
-    font-size: 9.6rem;
+    font-size: 12.8rem;
     user-select: none;
     cursor: pointer;
+    text-align: center;
+}
+.counter-buttons {
+    text-align: center;
 }
 
 
+dt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
 dd {
-    margin: 0 0 1rem 0;
+    margin: 0 0 2rem 0;
 }
 details {
     :active {
