@@ -22,10 +22,17 @@
             <section v-show="!counter.start">
                 <ul>
                     <li v-for="(group, g) in db">
-                        <button @click="groupRemove(g)">&times;</button>
-                        <button @click="groupEdit(g)">&hellip;</button>
-                        <strong>{{ group.name }}</strong>
-                        <button @click="counterStart(g)">start!</button>
+                        <details>
+                            <summary>
+                                <strong>{{ group.name }}</strong>
+                                <button @click="counterStart(g)">start!</button>
+                            </summary>
+                            <div>
+                                <a @click="groupRemove(g)">&times; Remove</a>
+                                <a @click="groupEdit(g)">&hellip; Edit</a>
+                            </div>
+                        </details>
+
                         <ul>
                             <li v-for="(item, i) in group.elements">
                                 <button @click="itemRemove(g, i)">&times;</button>
@@ -52,6 +59,7 @@
 
 <script>
 import tinytime from 'tinytime';
+import { version } from "../../package.json";
 
 const placeholderData = [
     {
@@ -73,7 +81,7 @@ const App = {
     data() {
         return {
             appName: 'Counter App',
-            appVersion : '0.0.1',
+            appVersion : version,
 
             currentView : {},
 
@@ -276,6 +284,8 @@ html, body {
 }
 a {
     color: $colorAlpha;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

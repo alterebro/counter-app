@@ -4,8 +4,10 @@
   "description": "It's just a counter webApp, that counts and stores the countings...",
   "main": "src/main.js",
   "scripts": {
-    "start": "parcel src/app.html",
-    "build": "parcel build src/app.html"
+    "start": "NODE_ENV=development parcel src/app.html -d .localserver",
+    "build": "NODE_ENV=production parcel build src/app.html --out-file index.html --public-url './' --no-cache --no-source-maps",
+    "serve": "ip=`ipconfig getifaddr en0`; php -S $ip:8000 -t dist/",
+    "clean": "rm -rf dist/* && rm -rf .localserver/*"
   },
   "alias": {
     "vue": "./node_modules/vue/dist/vue.common.js"
