@@ -1,6 +1,6 @@
 {
   "name": "counter-app",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "It's just a counter webApp, that counts and stores the countings...",
   "main": "src/main.js",
   "scripts": {
