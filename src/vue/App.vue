@@ -1,8 +1,11 @@
 <template>
     <div class="app">
         <header>
-            <h1 @click="changeView('/')">{{ appName }}</a></h1>
-            <button @click="changeView('/settings')">&equiv;</button>
+            <div>
+                <h1>{{ appName }}</h1>
+                <a v-show="currentView.app" href="#" @click="changeView('/settings')"><span class="material-icons"><i class="material-icons">menu</i></span></a>
+                <a v-show="!currentView.app" href="#" @click="changeView('/')"><span class="material-icons">arrow_back_ios</span></a>
+            </div>
         </header>
 
         <main v-show="currentView.settings">
@@ -20,10 +23,35 @@
 
         <main v-show="currentView.app">
             <section v-show="!counter.start">
+
+                <dl>
+                    <template v-for="(group, g) in db">
+                        <dt><strong>{{ group.name }}</strong></dt>
+                        <dd>
+                            <ul>
+                                <li v-for="(day, d) in dbjson[g]">
+                                    <details>
+                                        <summary><span>{{ day.date }}</span> <strong>{{ day.total }}</strong></summary>
+                                        <ul>
+                                            <li v-for="(item, i) in day.items">
+                                                <span>{{ item.start }} ({{ item.duration }})</span>
+                                                <em>{{ item.count }}</em>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                            </ul>
+                        </dd>
+                    </template>
+                </dl>
+
+                <!--
+                <hr />
                 <ul>
                     <li v-for="(group, g) in db">
                         <details>
                             <summary>
+
                                 <strong>{{ group.name }}</strong>
                                 <button @click="counterStart(g)">start!</button>
                             </summary>
@@ -32,26 +60,37 @@
                                 <a @click="groupEdit(g)">&hellip; Edit</a>
                             </div>
                         </details>
-
                         <ul>
                             <li v-for="(item, i) in group.elements">
-                                <button @click="itemRemove(g, i)">&times;</button>
-                                <button @click="itemEdit(g, i)">&hellip;</button>
-                                {{ item.start | startTime }} ({{ item.end | endTime(item.start) }}) &rarr; <strong>{{ item.count }}</strong>
+
+                                <i class="material-icons">event</i>
+                                {{ item.start | startTime }}
+
+                                <i class="material-icons">alarm</i>
+                                {{ item.end | endTime(item.start) }}
+
+                                &rarr; <strong>{{ item.count }}</strong>
+
+                                <button @click="itemEdit(g, i)"><i class="material-icons">edit</i> Edit</button>
+                                <button @click="itemRemove(g, i)"><i class="material-icons">delete</i> Remove</button>
                             </li>
                         </ul>
                     </li>
                 </ul>
                 <button @click="groupNew()">New Counter</button>
+                <hr />
+                <pre>{{ dbjson }}</pre>
+                -->
+
             </section>
             <section v-show="counter.start">
                 <div class="counter-count" @click="counterIncrease()">
                     {{ counter.count }}
                 </div>
-                <button @click="counterIncrease()">+</button>
-                <button @click="counterDecrease()">-</button>
-                <button @click="counterStop()">Stop &amp; Save</button>
-                <button @click="counterReset()">Cancel</button>
+                <button @click="counterIncrease()"><i class="material-icons">add</i> Add</button>
+                <button @click="counterDecrease()"><i class="material-icons">remove</i> Remove</button>
+                <button @click="counterStop()"><i class="material-icons">save</i> Stop &amp; Save</button>
+                <button @click="counterReset()"><i class="material-icons">close</i> Cancel</button>
             </section>
         </main>
     </div>
@@ -109,10 +148,56 @@ const App = {
 
     },
 
+    computed : {
+
+        dbjson : function() {
+
+            let _output = [];
+            let _db = this.db;
+                _db.forEach( function(g, i) {
+
+                    let _items = [];
+                    g.elements.forEach( function(el, j) {
+
+                        let _date = tinytime('{YYYY}-{Mo}-{DD}', { padMonth: true }).render( new Date(el.start) );
+                        let _el = {
+                            'count' : el.count,
+                            'start' : tinytime('{h}:{mm} {a}').render( new Date(el.start) ),
+                            'duration' : tinytime('{mm}:{ss}s').render( new Date(el.end - el.start) ),
+                            'id' : j
+                        }
+
+                        if ( _items.filter(function(a){ return a.date == _date }).length === 0 ) {
+
+                            _items.push({ "date" : _date, "total" : el.count, "items" : [ _el ] })
+
+                        } else {
+
+                            let _existingItem = _items.filter(function(a){ return a.date == _date })[0];
+                                _existingItem.total = parseInt(_existingItem.total) + parseInt(el.count);
+                                _existingItem.items.push(_el)
+                        }
+
+                    });
+
+
+                    // _items.forEach((item, i) => {
+                    //     item.items = [...item.items.reverse()];
+                    // });
+
+                    _output.push([..._items].reverse());
+                });
+
+            return _output;
+        }
+    },
+
     methods: {
 
         changeView : function(path) {
+
             console.log(path);
+
             const paths = {
                 '/' : {
                     app : true,
@@ -239,7 +324,7 @@ $colorBeta : #23466a;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-html, body, h1, h2, h3, h4, p, ul, li {
+html, body, h1, h2, h3, h4, p, dl, dt, dd, ul, li {
     margin: 0;
     padding: 0;
 }
@@ -267,17 +352,13 @@ html {
 }
 body {
     font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-    font-size: 1.3em;
+    font-size: 1.4em;
     font-weight: 400;
     line-height: 1.6;
     background: $colorBg;
     color: $colorFg;
 }
-html, body {
-    height: 100%;
-    min-height: 100%;
-    overflow: hidden;
-}
+html, body {}
 *, *:before, *:after {
 	box-sizing: inherit;
 	background-repeat: no-repeat;
@@ -295,15 +376,25 @@ header {
     color: $colorBg;
     background: $colorAlpha;
 
+    > div {
+        max-width: 64rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+    }
+
     h1 {
       font-weight: 400;
     }
-
     a {
         color: $colorBg;
     }
 }
 main {
+    max-width: 64rem;
+    margin: 0 auto;
     padding: 1rem;
 }
 
@@ -311,10 +402,19 @@ button {
     background: $colorBeta;
     color: $colorBg;
     border: none;
-    padding: .5rem 1rem;
-    margin: .2rem;
+    padding: .5rem 1.5rem;
+    margin: 0;
     border-radius: .3rem;
     cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .material-icons {
+        font-size: 14px;
+        margin: 0 .5rem 0 0;
+    }
 }
 
 
@@ -323,5 +423,44 @@ button {
     user-select: none;
     cursor: pointer;
 }
+
+
+dd {
+    margin: 0 0 1rem 0;
+}
+details {
+    :active {
+        outline: none;
+    }
+    > summary {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom: solid #ccc 1px;
+        padding: .5rem;
+
+        strong {
+            flex: 1 1 auto;
+            text-align: right;
+        }
+    }
+    > ul {
+        padding: 0 .5rem 0 2rem;
+
+        > li {
+            color: #999;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            em {
+                flex: 1 1 auto;
+                text-align: right;
+                font-style: normal;
+            }
+        }
+    }
+}
+
 
 </style>
