@@ -59,7 +59,7 @@
 
 <script>
 import tinytime from 'tinytime';
-import { version } from "../../package.json";
+import { version } from "../../version.json";
 
 const placeholderData = [
     {
