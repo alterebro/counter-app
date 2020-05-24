@@ -40,8 +40,16 @@
                                         <summary><span>{{ day.date }}</span> <strong>{{ day.total }}</strong></summary>
                                         <ul>
                                             <li v-for="(item, i) in day.items">
-                                                <span>{{ item.start }} ({{ item.duration }})</span>
-                                                <em>{{ item.count }}</em>
+
+                                                <details>
+                                                    <summary>
+                                                        <span><strong>{{ item.start }}</strong> ({{ item.duration }})</span>
+                                                        <em>{{ item.count }}</em>
+                                                    </summary>
+                                                    <p>
+                                                        <a href="#" @click="itemEdit(item.group, item.id)">Edit</a> &mdash; <a href="#" @click="itemRemove(item.group, item.id)">Remove</a>
+                                                    </p>
+                                                </details>
                                             </li>
                                         </ul>
                                     </details>
@@ -82,10 +90,11 @@
                         </ul>
                     </li>
                 </ul>
-                <button @click="groupNew()">New Counter</button>
                 <hr />
                 <pre>{{ dbjson }}</pre>
                 -->
+
+                <button @click="groupNew()">New Counter</button>
 
             </section>
             <section v-show="counter.start">
@@ -173,7 +182,8 @@ const App = {
                             'count' : el.count,
                             'start' : tinytime('{h}:{mm} {a}').render( new Date(el.start) ),
                             'duration' : tinytime('{mm}:{ss}s').render( new Date(el.end - el.start) ),
-                            'id' : j
+                            'id' : j,
+                            'group' : i,
                         }
 
                         if ( _items.filter(function(a){ return a.date == _date }).length === 0 ) {
@@ -189,11 +199,10 @@ const App = {
 
                     });
 
+                    // Reverse order inner items
+                    _items.forEach((item, i) => { item.items = [...item.items.reverse()]; });
 
-                    // _items.forEach((item, i) => {
-                    //     item.items = [...item.items.reverse()];
-                    // });
-
+                    // Append'em in reverse order also...
                     _output.push([..._items].reverse());
                 });
 
@@ -445,40 +454,53 @@ dt {
 }
 dd {
     margin: 0 0 2rem 0;
-}
-details {
-    :active {
-        outline: none;
-    }
-    > summary {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        border-bottom: solid #ccc 1px;
-        padding: .5rem;
 
-        strong {
-            flex: 1 1 auto;
-            text-align: right;
-        }
-    }
-    > ul {
-        padding: 0 .5rem 0 2rem;
+    ul li {
 
-        > li {
-            color: #999;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
+        > details {
 
-            em {
-                flex: 1 1 auto;
-                text-align: right;
-                font-style: normal;
+            > summary {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                border-bottom: solid #ccc 1px;
+                padding: .5rem;
+
+                > strong {
+                    flex: 1 1 auto;
+                    text-align: right;
+                }
+            }
+            > ul {
+                padding: 0 .5rem 0 2rem;
+
+                > li {
+
+                    details {
+                        summary {
+                            color: lighten($colorFg, 35%);
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+
+                            strong {
+                                display: inline-block;
+                                min-width: 8rem;
+                            }
+                            em {
+                                flex: 1 1 auto;
+                                text-align: right;
+                                font-style: normal;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
+
+
 
 
 </style>
