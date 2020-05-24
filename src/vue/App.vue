@@ -115,23 +115,8 @@
 
 <script>
 import tinytime from 'tinytime';
-import { version, build } from "../../version.json";
-
-const placeholderData = [
-    {
-        "name" : "Diamond Push-Ups",
-        "elements" : [
-            {"count": 14, "start": 1589996663864, "end": 1589996675936 },
-            {"count": 11, "start": 1589996880494, "end": 1589996886459 }
-        ]
-    },{
-        "name" : "Knee Push-Ups",
-        "elements" : [
-            {"count": 22, "start": 1590159047784, "end": 1590159054556 },
-            {"count": 36, "start": 1590159102971, "end": 1590159114492 }
-        ]
-    }
-];
+import { version, build } from "../version.json";
+import * as dbsample from '../db-sample.json';
 
 const App = {
     data() {
@@ -141,14 +126,13 @@ const App = {
             appBuild : build,
 
             currentView : {},
-
             currentCounter : 0,
             counter : {
                 count : 0,
                 start : false,
                 end: false
             },
-            db : JSON.parse(localStorage.getItem('counter-app-items')) || placeholderData,
+            db : JSON.parse(localStorage.getItem('counter-app-items')) || dbsample.default,
             dbURL : '#db'
         };
     },
@@ -163,7 +147,6 @@ const App = {
             let _timestamp = tinytime('{mm}m{ss}s');
             return _timestamp.render( new Date(value - start) );
         }
-
     },
 
     computed : {
