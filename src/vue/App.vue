@@ -91,7 +91,7 @@
                     </li>
                 </ul>
                 <hr />
-                <pre>{{ dbjson }}</pre>
+
                 -->
 
                 <button @click="groupNew()">New Counter</button>
@@ -110,10 +110,15 @@
                 </div>
             </section>
         </main>
+
+        <pre>{{ noSleep }}</pre>
+
+
     </div>
 </template>
 
 <script>
+import NoSleep from 'nosleep.js';
 import tinytime from 'tinytime';
 import { version, build } from "../version.json";
 import * as dbsample from '../db-sample.json';
@@ -133,7 +138,9 @@ const App = {
                 end: false
             },
             db : JSON.parse(localStorage.getItem('counter-app-items')) || dbsample.default,
-            dbURL : '#db'
+            dbURL : '#db',
+
+            noSleep : new NoSleep()
         };
     },
     name: "App",
@@ -216,6 +223,7 @@ const App = {
         counterStart : function(id) {
             this.currentCounter = id;
             this.counter.start = Date.now();
+            this.noSleep.enable();
         },
         counterIncrease : function() {
             this.counter.count++;
@@ -236,6 +244,7 @@ const App = {
                 start : false,
                 end: false
             }
+            this.noSleep.disable();
         },
 
         // DB
