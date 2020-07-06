@@ -1,27 +1,9 @@
 <template>
     <div class="app">
-        <header>
-            <div>
-                <h1>{{ appName }}</h1>
-                <a v-show="currentView.app" href="#" @click="changeView('/settings')"><span class="material-icons"><i class="material-icons">menu</i></span></a>
-                <a v-show="!currentView.app" href="#" @click="changeView('/')"><span class="material-icons">arrow_back_ios</span></a>
-            </div>
-        </header>
 
+        <Header></Header>
         <main v-show="currentView.settings">
-            <section>
-                <h2>Settings</h2>
-                <h3>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro">@alterebro</a></h3>
-                <hr />
-                <h4>Export and export database file</h4>
-                <p><a :href="dbURL" download="db.txt" @click="dbExport()">Export data / Save DB</a></p>
-
-                <h4>Import data file (db.txt)</h4>
-                <p><input type="file" @change="dbImport" accept=".txt"></p>
-
-                <hr />
-                <p>{{ appName }} v{{ appVersion }} ( <em>build: {{ appBuild }}</em> )</p>
-            </section>
+            <Settings></Settings>
         </main>
 
         <main v-show="currentView.app">
@@ -30,6 +12,11 @@
                 <dl>
                     <template v-for="(group, g) in db">
                         <dt>
+                            <span>
+                                <a @click="groupRemove(g)"><i class="material-icons">delete</i></a>
+                                <a @click="groupEdit(g)"><i class="material-icons">edit</i></a>
+                            </span>
+
                             <strong>{{ group.name }}</strong>
                             <button @click="counterStart(g)">Count!</button>
                         </dt>
@@ -40,16 +27,12 @@
                                         <summary><span>{{ day.date }}</span> <strong>{{ day.total }}</strong></summary>
                                         <ul>
                                             <li v-for="(item, i) in day.items">
-
-                                                <details>
-                                                    <summary>
-                                                        <span><strong>{{ item.start }}</strong> ({{ item.duration }})</span>
-                                                        <em>{{ item.count }}</em>
-                                                    </summary>
-                                                    <p>
-                                                        <a href="#" @click="itemEdit(item.group, item.id)">Edit</a> &mdash; <a href="#" @click="itemRemove(item.group, item.id)">Remove</a>
-                                                    </p>
-                                                </details>
+                                                <span>
+                                                    <a href="#" @click="itemRemove(item.group, item.id)"><i class="material-icons">delete</i></a>
+                                                    <a href="#" @click="itemEdit(item.group, item.id)"><i class="material-icons">edit</i></a>
+                                                    <strong>{{ item.start }}</strong> ({{ item.duration }})
+                                                </span>
+                                                <span>{{ item.count }}</span>
                                             </li>
                                         </ul>
                                     </details>
@@ -59,91 +42,41 @@
                     </template>
                 </dl>
 
-                <!--
-                <hr />
-                <ul>
-                    <li v-for="(group, g) in db">
-                        <details>
-                            <summary>
-                                <strong>{{ group.name }}</strong>
-                                <button @click="counterStart(g)">start!</button>
-                            </summary>
-                            <div>
-                                <a @click="groupRemove(g)">&times; Remove</a>
-                                <a @click="groupEdit(g)">&hellip; Edit</a>
-                            </div>
-                        </details>
-                        <ul>
-                            <li v-for="(item, i) in group.elements">
-
-                                <i class="material-icons">event</i>
-                                {{ item.start | startTime }}
-
-                                <i class="material-icons">alarm</i>
-                                {{ item.end | endTime(item.start) }}
-
-                                &rarr; <strong>{{ item.count }}</strong>
-
-                                <button @click="itemEdit(g, i)"><i class="material-icons">edit</i> Edit</button>
-                                <button @click="itemRemove(g, i)"><i class="material-icons">delete</i> Remove</button>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <hr />
-
-                -->
-
                 <button @click="groupNew()">New Counter</button>
 
             </section>
-            <section v-show="counter.start">
+            <section v-show="counter.start" class="counter-view">
                 <div class="counter-count" @click="counterIncrease()">
                     {{ counter.count }}
                 </div>
                 <div class="counter-buttons">
                     <button @click="counterStop()"><i class="material-icons">save</i> &nbsp; Stop &amp; Save</button>
                     <hr>
-                    <button @click="counterIncrease()"><i class="material-icons">add</i></button>
-                    <button @click="counterDecrease()"><i class="material-icons">remove</i></button>
-                    <button @click="counterReset()"><i class="material-icons">close</i></button>
+                    <button @click="counterIncrease()" title="Counter Increase"><i class="material-icons">add</i></button>
+                    <button @click="counterDecrease()" title="Counter Decrease"><i class="material-icons">remove</i></button>
+                    <button @click="counterReset()" title="Cancel Counter and Close"><i class="material-icons">close</i></button>
                 </div>
             </section>
         </main>
-
-        <pre>{{ noSleep }}</pre>
-
 
     </div>
 </template>
 
 <script>
-import NoSleep from 'nosleep.js';
 import tinytime from 'tinytime';
-import { version, build } from "../version.json";
-import * as dbsample from '../db-sample.json';
+import { Data } from './Store.js';
+import Header from './Header.vue';
+import Settings from './Settings.vue';
 
 const App = {
     data() {
-        return {
-            appName: 'Counter App',
-            appVersion : version,
-            appBuild : build,
-
-            currentView : {},
-            currentCounter : 0,
-            counter : {
-                count : 0,
-                start : false,
-                end: false
-            },
-            db : JSON.parse(localStorage.getItem('counter-app-items')) || dbsample.default,
-            dbURL : '#db',
-
-            noSleep : new NoSleep()
-        };
+        return Data;
     },
     name: "App",
+    components: {
+        Header,
+        Settings
+    },
     filters : {
 
         startTime(value) {
@@ -167,7 +100,7 @@ const App = {
                     let _items = [];
                     g.elements.forEach( function(el, j) {
 
-                        let _date = tinytime('{YYYY}-{Mo}-{DD}', { padMonth: true }).render( new Date(el.start) );
+                        let _date = tinytime('{YYYY}-{Mo}-{DD}', { padMonth: true, padDays: true }).render( new Date(el.start) );
                         let _el = {
                             'count' : el.count,
                             'start' : tinytime('{h}:{mm} {a}').render( new Date(el.start) ),
@@ -203,27 +136,15 @@ const App = {
     methods: {
 
         changeView : function(path) {
-
-            console.log(path);
-
-            const paths = {
-                '/' : {
-                    app : true,
-                    settings : false
-                },
-                '/settings' : {
-                    app : false,
-                    settings : true
-                }
-            }
-            this.currentView = paths[path];
+            // Shared method
+            this.switchView(path);
         },
 
         // Counter
         counterStart : function(id) {
             this.currentCounter = id;
             this.counter.start = Date.now();
-            this.noSleep.enable();
+            // this.noSleep.enable();
         },
         counterIncrease : function() {
             this.counter.count++;
@@ -244,49 +165,19 @@ const App = {
                 start : false,
                 end: false
             }
-            this.noSleep.disable();
+            // this.noSleep.disable();
         },
 
         // DB
         dbSave : function() {
-            localStorage.setItem('counter-app-items', JSON.stringify(this.db));
-        },
-        dbExport : function() {
-
-            let _db = JSON.stringify(this.db);
-            let _blob = new Blob([_db], {type: "text/plain;charset=utf-8"});
-            let _url = window.URL.createObjectURL(_blob);
-            this.dbURL = _url;
-
-            return true;
-            // window.URL.revokeObjectURL(_url);
-        },
-        dbImport : function(ev) {
-
-            let _file = ev.target.files[0];
-            let _reader = new FileReader();
-                _reader.readAsText(_file);
-                _reader.onload = (e) => {
-                    let _db = JSON.parse(e.target.result);
-                        _db.forEach((item, i) => {
-                            if (!(( !!item.name && typeof(item.name) === 'string' ) && ( !!item.elements && Array.isArray(item.elements) ))) {
-                                _db = false;
-                            }
-                        });
-
-                    if (_db) {
-                        this.db = _db;
-                        this.dbSave();
-                        this.changeView('/');
-                    }
-                }
+            this.databaseSave(); // (Shared)
         },
 
         // Items
         itemEdit : function(group, id) {
             let _number = window.prompt('Count', this.db[group].elements[id].count );
             if ( !isNaN(_number) ) {
-                this.db[group].elements[id].count = _number;
+                this.db[group].elements[id].count = parseInt(_number);
                 this.dbSave();
             }
         },
@@ -297,24 +188,28 @@ const App = {
 
         // Groups
         groupNew : function() {
-            let _timestamp = tinytime('{YYYY}.{Mo}.{DD}', { padMonth: true });
+            let _timestamp = tinytime('{YYYY}.{Mo}.{DD}', { padMonth: true, padDays: true });
             let _group = window.prompt('Name of the new counter', _timestamp.render( new Date() ) + ' Counter' );
-            this.db.push({
-                "name" : _group,
-                "elements" : []
-            });
-            this.dbSave();
+            if (!!_group) {
+                this.db.push({
+                    "name" : _group,
+                    "elements" : []
+                });
+                this.dbSave();
+            }
         },
         groupEdit : function(group) {
             let _name = window.prompt('Name of the counter', this.db[group].name );
-            this.db[group].name = _name;
-            this.dbSave();
+            if (!!_name) {
+                this.db[group].name = _name;
+                this.dbSave();
+            }
         },
         groupRemove : function(group) {
             if (window.confirm("Do you really want to remove the counter?")) {
                 this.db.splice(group, 1)
+                this.dbSave();
             }
-            this.dbSave();
         }
     },
     created() {
@@ -326,11 +221,7 @@ export default App;
 </script>
 
 <style lang="scss">
-
-$colorBg : #f7f7f7;
-$colorFg : #303030;
-$colorAlpha : #20325e;
-$colorBeta : #23466a;
+@import "./../scss/_variables.scss";
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -380,28 +271,30 @@ a {
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
 
-header {
-    padding: 1rem;
-    color: $colorBg;
-    background: $colorAlpha;
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+    min-height: 100%;
 
-    > div {
-        max-width: 64rem;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 1rem;
+    header {
+        width: 100%;
+        flex: 0;
     }
-
-    h1 {
-      font-weight: 400;
-    }
-    a {
-        color: $colorBg;
+    main {
+        height: 100%;
+        width: 100%;
+        flex: 1;
     }
 }
+
 main {
     max-width: 64rem;
     margin: 0 auto;
@@ -426,24 +319,61 @@ button {
     }
 }
 
-
-.counter-count {
-    font-size: 12.8rem;
-    user-select: none;
+hr {
+    height: 0;
+    margin: 1rem 0;
+    border: none;
+    border-top: solid lighten($colorFg, 60%) 1px;
+}
+section {
+    padding: 0 0;
+}
+details summary {
+    outline: none;
     cursor: pointer;
-    text-align: center;
-}
-.counter-buttons {
-    text-align: center;
 }
 
+.counter-view { // section
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .counter-count {
+        flex: 1;
+        font-size: 12.8rem;
+        user-select: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .counter-buttons {
+        flex: 0;
+        text-align: center;
+        padding-top: 2rem;
+    }
+}
 
 dt {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
+
+    span {
+        padding: 0 .5rem 0 0;
+
+        .material-icons {
+            font-size: 18px;
+            margin: 0 .5rem 0 0;
+        }
+    }
+    strong {
+        flex: 1;
+        text-align: left;
+    }
 }
+
 dd {
     margin: 0 0 2rem 0;
 
@@ -455,7 +385,7 @@ dd {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
-                border-bottom: solid #ccc 1px;
+                border-bottom: solid lighten($colorFg, 60%) 1px;
                 padding: .5rem;
 
                 > strong {
@@ -464,35 +394,29 @@ dd {
                 }
             }
             > ul {
-                padding: 0 .5rem 0 2rem;
+
+                padding: 0 0 0 2rem;
 
                 > li {
 
-                    details {
-                        summary {
-                            color: lighten($colorFg, 35%);
-                            display: flex;
-                            justify-content: flex-start;
-                            align-items: center;
+                    color: lighten($colorFg, 30%);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: solid lighten($colorFg, 60%) 1px;
+                    padding: .5rem .5rem .5rem 0;
+                    vertical-align: baseline;
 
-                            strong {
-                                display: inline-block;
-                                min-width: 8rem;
-                            }
-                            em {
-                                flex: 1 1 auto;
-                                text-align: right;
-                                font-style: normal;
-                            }
-                        }
+                    .material-icons {
+                        font-size: 18px;
+                        margin: 0 .5rem 0 0;
+                        color: lighten($colorFg, 30%);
+                        position: relative;
+                        top: .25rem;
                     }
                 }
             }
         }
     }
 }
-
-
-
-
 </style>
