@@ -10,7 +10,8 @@
     "clean": "rm -rf www/* && rm -rf .localserver/*",
     "version": "npm run appversion && npm run build && git add src/version.json",
     "appversion": "PKG_VERSION=$(node -pe \"require('./package.json').version\") && D=`date +%Y%m%d%H%M%S` && echo '{ \"version\" : \"'$PKG_VERSION'\", \"build\" : \"'$D'\" }' > src/version.json",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "deploy": "netlify deploy --prod"
   },
   "alias": {
     "vue": "./node_modules/vue/dist/vue.common.js"
