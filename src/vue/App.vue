@@ -13,8 +13,8 @@
                     <template v-for="(group, g) in db">
                         <dt>
                             <span>
-                                <a @click="groupRemove(g)"><i class="material-icons">delete</i></a>
-                                <a @click="groupEdit(g)"><i class="material-icons">edit</i></a>
+                                <a @click="groupRemove(g)"><i class="icon icon-delete">Remove</i></a>
+                                <a @click="groupEdit(g)"><i class="icon icon-edit">Edit</i></a>
                             </span>
 
                             <strong>{{ group.name }}</strong>
@@ -28,8 +28,8 @@
                                         <ul>
                                             <li v-for="(item, i) in day.items">
                                                 <span>
-                                                    <a href="#" @click="itemRemove(item.group, item.id)"><i class="material-icons">delete</i></a>
-                                                    <a href="#" @click="itemEdit(item.group, item.id)"><i class="material-icons">edit</i></a>
+                                                    <a href="#" @click="itemRemove(item.group, item.id)"><i class="icon icon-delete">Remove</i></a>
+                                                    <a href="#" @click="itemEdit(item.group, item.id)"><i class="icon icon-edit">Edit</i></a>
                                                     <strong>{{ item.start }}</strong> ({{ item.duration }})
                                                 </span>
                                                 <span>{{ item.count }}</span>
@@ -42,7 +42,9 @@
                     </template>
                 </dl>
 
-                <button @click="groupNew()">New Counter</button>
+                <div class="new-group-button">
+                    <button @click="groupNew()"><i class="icon icon-add">Add</i> &nbsp; New Counter</button>
+                </div>
 
             </section>
             <section v-show="counter.start" class="counter-view">
@@ -50,11 +52,11 @@
                     {{ counter.count }}
                 </div>
                 <div class="counter-buttons">
-                    <button @click="counterStop()"><i class="material-icons">save</i> &nbsp; Stop &amp; Save</button>
+                    <button @click="counterStop()"><i class="icon icon-save">Save</i> &nbsp; Stop &amp; Save</button>
                     <hr>
-                    <button @click="counterIncrease()" title="Counter Increase"><i class="material-icons">add</i></button>
-                    <button @click="counterDecrease()" title="Counter Decrease"><i class="material-icons">remove</i></button>
-                    <button @click="counterReset()" title="Cancel Counter and Close"><i class="material-icons">close</i></button>
+                    <button @click="counterIncrease()" title="Counter Increase"><i class="icon icon-add">Add</i></button>
+                    <button @click="counterDecrease()" title="Counter Decrease"><i class="icon icon-remove">Remove</i></button>
+                    <button @click="counterReset()" title="Cancel Counter and Close"><i class="icon icon-close">Close</i></button>
                 </div>
             </section>
         </main>
@@ -271,11 +273,38 @@ a {
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 html, body {
     height: 100%;
     min-height: 100%;
 }
+button {
+    background: $colorBeta;
+    color: $colorBg;
+    border: none;
+    padding: .5rem 1.5rem;
+    margin: 0;
+    border-radius: .3rem;
+    cursor: pointer;
 
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+hr {
+    height: 0;
+    margin: 1rem 0;
+    border: none;
+    border-top: solid lighten($colorFg, 60%) 1px;
+}
+details summary {
+    outline: none;
+    cursor: pointer;
+}
+
+
+// ~~~~~~~~~~~~~~~~~~~
+// UI Layout
 .app {
     display: flex;
     flex-direction: column;
@@ -292,48 +321,15 @@ html, body {
         height: 100%;
         width: 100%;
         flex: 1;
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 1rem;
     }
 }
 
-main {
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 1rem;
-}
-
-button {
-    background: $colorBeta;
-    color: $colorBg;
-    border: none;
-    padding: .5rem 1.5rem;
-    margin: 0;
-    border-radius: .3rem;
-    cursor: pointer;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .material-icons {
-        font-size: 14px;
-    }
-}
-
-hr {
-    height: 0;
-    margin: 1rem 0;
-    border: none;
-    border-top: solid lighten($colorFg, 60%) 1px;
-}
-section {
-    padding: 0 0;
-}
-details summary {
-    outline: none;
-    cursor: pointer;
-}
-
-.counter-view { // section
+// ~~~~~~~~~~~~~~~~~~~
+// Counter View
+.counter-view {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -354,20 +350,15 @@ details summary {
     }
 }
 
+// ~~~~~~~~~~~~~~~~~~~
+// Main List
 dt {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
 
-    span {
-        padding: 0 .5rem 0 0;
-
-        .material-icons {
-            font-size: 18px;
-            margin: 0 .5rem 0 0;
-        }
-    }
+    span { padding: 0 .5rem 0 0; }
     strong {
         flex: 1;
         text-align: left;
@@ -406,17 +397,86 @@ dd {
                     border-bottom: solid lighten($colorFg, 60%) 1px;
                     padding: .5rem .5rem .5rem 0;
                     vertical-align: baseline;
-
-                    .material-icons {
-                        font-size: 18px;
-                        margin: 0 .5rem 0 0;
-                        color: lighten($colorFg, 30%);
-                        position: relative;
-                        top: .25rem;
-                    }
                 }
             }
         }
     }
 }
+
+.new-group-button {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 1rem;
+    padding: 1rem 0;
+}
+
+// ~~~~~~~~~~~~~~~~~~~
+// Icons
+.icon {
+    display: inline-block;
+    overflow: hidden;
+    mask-size: cover;
+    -webkit-mask-size: cover;
+    text-indent: -1000rem;
+}
+header .icon {
+    width: 24px;
+    height: 24px;
+    background: #fff;
+}
+main dl dt span .icon {
+    height: 18px;
+    width: 18px;
+    background: $colorAlpha;
+    margin: 0 .5rem 0 0;
+    position: relative;
+    top: .25rem;
+}
+main dl dd ul li details ul li .icon {
+    height: 18px;
+    width: 18px;
+    background: lighten($colorFg, 30%);
+    margin: 0 .5rem 0 0;
+    position: relative;
+    top: .25rem;
+}
+button .icon {
+    width: 14px;
+    height: 14px;
+    background: #fff;
+}
+
+.icon-menu {
+    mask-image: url(./../images/menu.svg);
+    -webkit-mask-image: url(./../images/menu.svg);
+}
+.icon-arrow-back {
+    mask-image: url(./../images/arrow_back.svg);
+    -webkit-mask-image: url(./../images/arrow_back.svg);
+}
+.icon-edit {
+    mask-image: url(./../images/edit.svg);
+    -webkit-mask-image: url(./../images/edit.svg);
+}
+.icon-delete {
+    mask-image: url(./../images/delete.svg);
+    -webkit-mask-image: url(./../images/delete.svg);
+}
+.icon-save {
+    mask-image: url(./../images/save.svg);
+    -webkit-mask-image: url(./../images/save.svg);
+}
+.icon-add {
+    mask-image: url(./../images/add.svg);
+    -webkit-mask-image: url(./../images/add.svg);
+}
+.icon-remove {
+    mask-image: url(./../images/remove.svg);
+    -webkit-mask-image: url(./../images/remove.svg);
+}
+.icon-close {
+    mask-image: url(./../images/close.svg);
+    -webkit-mask-image: url(./../images/close.svg);
+}
+
 </style>

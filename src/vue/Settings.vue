@@ -1,16 +1,19 @@
 <template lang="html">
     <section>
         <h2>Settings</h2>
-        <h3>{{ appName }} v{{ appVersion }} by <a href="https://twitter.com/alterebro" title="Jorge Moreno. Front End Web Developer and UI Designer" target="_blank">@alterebro</a></h3>
         <hr />
-        <h4>Export and export database file</h4>
-        <p><a :href="dbURL" download="db.txt" @click="dbExport()">Export data / Save DB</a></p>
 
-        <h4>Import data file (db.txt)</h4>
-        <p><input type="file" @change="dbImport" accept=".txt"></p>
+            <h4>Export and Save database file</h4>
+            <p><a :href="dbURL" download="db.txt" @click.prevent="dbExport()">Export data / Save DB</a></p>
+
+            <h4>Import data file (db.txt)</h4>
+            <p><input type="file" @change="dbImport" accept=".txt"></p>
 
         <hr />
-        <p>{{ appName }} v{{ appVersion }} ( <em>build: {{ appBuild }}</em> )</p>
+        <p>
+            {{ appName }} v{{ appVersion }} ( <em>build: {{ appBuild }}</em> ) &bull; by: <strong><a href="https://twitter.com/alterebro" title="Jorge Moreno. Front End Web Developer and UI Designer" target="_blank">@alterebro</a></strong>
+            <br><small>Source Code: <a href="https://github.com/alterebro/counter-app" target="_blank" title="Web Application Source Code">github.com/alterebro/counter-app</a></small>
+        </p>
     </section>
 </template>
 
@@ -62,7 +65,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-section {
-
-}
+section { padding: 1rem 0; }
+h4 { font-size: 100%; }
+h4 + p { margin: 0 0 1rem 0; }
 </style>

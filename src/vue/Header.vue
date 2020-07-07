@@ -2,8 +2,8 @@
     <header>
         <div>
             <h1>{{ appName }}</h1>
-            <a v-show="currentView.app" href="#" @click.prevent="changeView('/settings')"><span class="material-icons"><i class="material-icons">menu</i></span></a>
-            <a v-show="!currentView.app" href="#" @click.prevent="changeView('/')"><span class="material-icons">arrow_back_ios</span></a>
+            <a v-show="currentView.app" href="#" @click.prevent="changeView('/settings')"><i class="icon icon-menu">Menu</i></a>
+            <a v-show="!currentView.app" href="#" @click.prevent="changeView('/')"><i class="icon icon-arrow-back">Back</i></a>
         </div>
     </header>
 </template>
@@ -46,6 +46,7 @@ header {
     }
     a {
         color: $colorBg;
+
     }
 }
 </style>

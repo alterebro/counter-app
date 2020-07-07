@@ -1,7 +1,7 @@
 {
   "name": "counter-app",
   "version": "0.2.1",
-  "description": "It's just a counter webApp, that counts and stores the countings...",
+  "description": "This is just a counter web application, that simply count things, it doesn't do anything else.",
   "main": "src/main.js",
   "scripts": {
     "start": "NODE_ENV=development parcel src/app.html -d .localserver",
