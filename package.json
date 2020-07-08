@@ -21,7 +21,10 @@
     "url": "git+https://github.com/alterebro/counter-app.git"
   },
   "keywords": [],
-  "author": "Jorge Moreno, moro.es (@alterebro)",
+  "author": {
+    "name": "Jorge Moreno, @alterebro",
+    "url": "https://moro.es"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alterebro/counter-app/issues"
@@ -31,6 +34,7 @@
     "@vue/component-compiler-utils": "^3.1.2",
     "nosleep.js": "^0.9.0",
     "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.4.3",
     "sass": "^1.26.5",
     "tinytime": "^0.2.6",
     "vue-template-compiler": "^2.6.11"
