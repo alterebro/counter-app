@@ -11,6 +11,12 @@ const root = builder.create('widget')
     const _name = root.ele('name', 'Counter App');
     const _desc = root.ele('description', pkg.description);
     const _author = root.ele('author', { 'href' : pkg.author.url }, pkg.author.name);
+
+    const _apilevel = root.ele('preference', {
+        'name' : 'android-targetSdkVersion',
+        'value' : '28'
+    });
+
     const _icon = root.ele('icon', {'src' : 'counter-app-icon.png'});
     const _platform = root.ele('platform', { 'name' : 'android'}, '');
 

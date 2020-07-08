@@ -3,6 +3,7 @@
   <name>Counter App</name>
   <description>This is just a counter web application, that simply count things, it doesn't do anything else.</description>
   <author href="https://moro.es">Jorge Moreno, @alterebro</author>
+  <preference name="android-targetSdkVersion" value="28"/>
   <icon src="counter-app-icon.png"/>
   <platform name="android"/>
 </widget>
