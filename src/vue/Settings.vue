@@ -11,8 +11,8 @@
 
         <hr />
         <p>
-            {{ appName }} v{{ appVersion }} ( <em>build: {{ appBuild }}</em> ) &bull; by: <strong><a href="https://twitter.com/alterebro" title="Jorge Moreno. Front End Web Developer and UI Designer" target="_blank">@alterebro</a></strong>
-            <br><small>Source Code: <a href="https://github.com/alterebro/counter-app" target="_blank" title="Web Application Source Code">github.com/alterebro/counter-app</a></small>
+            {{ appName }} v{{ appVersion }} &bull; By: <strong><a href="https://twitter.com/alterebro" title="Jorge Moreno. Front End Web Developer and UI Designer" target="_blank">@alterebro</a></strong>
+            <br><strong>Source Code</strong>: <a href="https://github.com/alterebro/counter-app" target="_blank" title="Web Application Source Code">github.com/alterebro/counter-app</a>
         </p>
     </section>
 </template>
@@ -67,5 +67,5 @@ export default {
 <style lang="scss" scoped>
 section { padding: 1rem 0; }
 h4 { font-size: 100%; }
-h4 + p { margin: 0 0 1rem 0; }
+h4 + p { margin: 0 0 2rem 0; }
 </style>

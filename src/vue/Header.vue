@@ -27,7 +27,7 @@ export default {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 header {
-    padding: 1rem .5rem;
+    padding: 1.25rem .5rem;
     color: $colorBg;
     background: $colorAlpha;
 
@@ -41,12 +41,15 @@ header {
     }
 
     h1 {
-      font-weight: 400;
-      font-size: 2.4rem;
+        font-weight: 400;
+        font-size: 2rem;
     }
     a {
         color: $colorBg;
-
+        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 </style>

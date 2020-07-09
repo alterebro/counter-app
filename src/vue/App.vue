@@ -323,7 +323,7 @@ details summary {
         flex: 1;
         max-width: 64rem;
         margin: 0 auto;
-        padding: 1rem;
+        padding: .5rem 1.5rem;
     }
 }
 
@@ -342,11 +342,19 @@ details summary {
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: 1rem 0 0 0;
+        border-radius: .5rem;
+
+        &:active, &:focus {
+            color: #fff;
+            background: $colorAlpha;
+        }
     }
     .counter-buttons {
         flex: 0;
         text-align: center;
         padding-top: 2rem;
+        padding-bottom: .5rem;
     }
 }
 
