@@ -8,12 +8,13 @@
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <plugin name="cordova-plugin-splashscreen"/>
+  <preference name="SplashScreen" value="splash"/>
   <preference name="SplashMaintainAspectRatio" value="true"/>
   <preference name="SplashShowOnlyFirstTime" value="false"/>
   <preference name="AutoHideSplashScreen" value="true"/>
-  <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="SplashScreenDelay" value="2600"/>
   <preference name="ShowSplashScreenSpinner" value="false"/>
-  <splash src="counter-app.jpg"/>
   <icon src="counter-app-icon.png"/>
+  <splash src="counter-app.jpg"/>
   <platform name="android"/>
 </widget>
