@@ -17,6 +17,21 @@ const root = builder.create('widget')
         'value' : '28'
     });
 
+    const _whitelist = root.ele('plugin', { 'name' : 'cordova-plugin-whitelist', 'version' : '1' });
+
+        const _whitelistPr01 = root.ele('allow-intent', { 'href' : 'http://*/*' });
+        const _whitelistPr02 = root.ele('allow-intent', { 'href' : 'https://*/*' });
+
+    const _splash = root.ele('plugin', { 'name' : 'cordova-plugin-splashscreen' });
+
+        const _splashPr01 = root.ele('preference', { 'name' : 'SplashMaintainAspectRatio', 'value' : 'true' });
+        const _splashPr02 = root.ele('preference', { 'name' : 'SplashShowOnlyFirstTime', 'value' : 'false' });
+        const _splashPr03 = root.ele('preference', { 'name' : 'AutoHideSplashScreen', 'value' : 'true' });
+        const _splashPr04 = root.ele('preference', { 'name' : 'SplashScreenDelay', 'value' : '3000' });
+        const _splashPr05 = root.ele('preference', { 'name' : 'ShowSplashScreenSpinner', 'value' : 'false' });
+
+    const _splashScreen = root.ele('splash', { 'src' : 'counter-app.jpg' });
+
     const _icon = root.ele('icon', {'src' : 'counter-app-icon.png'});
     const _platform = root.ele('platform', { 'name' : 'android'}, '');
 

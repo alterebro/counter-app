@@ -4,6 +4,16 @@
   <description>This is just a counter web application, that simply count things, it doesn't do anything else.</description>
   <author href="https://moro.es">Jorge Moreno, @alterebro</author>
   <preference name="android-targetSdkVersion" value="28"/>
+  <plugin name="cordova-plugin-whitelist" version="1"/>
+  <allow-intent href="http://*/*"/>
+  <allow-intent href="https://*/*"/>
+  <plugin name="cordova-plugin-splashscreen"/>
+  <preference name="SplashMaintainAspectRatio" value="true"/>
+  <preference name="SplashShowOnlyFirstTime" value="false"/>
+  <preference name="AutoHideSplashScreen" value="true"/>
+  <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="ShowSplashScreenSpinner" value="false"/>
+  <splash src="counter-app.jpg"/>
   <icon src="counter-app-icon.png"/>
   <platform name="android"/>
 </widget>
