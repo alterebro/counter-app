@@ -1,20 +1,28 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.alterebro.counter-app" version="0.4.4">
   <name>Counter App</name>
   <description>This is just a counter web application, that simply count things, it doesn't do anything else.</description>
   <author href="https://moro.es">Jorge Moreno, @alterebro</author>
+  <preference name="permissions" value="none"/>
+  <preference name="orientation" value="default"/>
+  <preference name="target-device" value="universal"/>
+  <preference name="fullscreen" value="false"/>
+  <preference name="android-installLocation" value="auto"/>
   <preference name="android-targetSdkVersion" value="28"/>
-  <plugin name="cordova-plugin-whitelist" version="1"/>
-  <allow-intent href="http://*/*"/>
-  <allow-intent href="https://*/*"/>
-  <plugin name="cordova-plugin-splashscreen"/>
   <preference name="SplashScreen" value="splash"/>
   <preference name="SplashMaintainAspectRatio" value="true"/>
   <preference name="SplashShowOnlyFirstTime" value="false"/>
   <preference name="AutoHideSplashScreen" value="true"/>
   <preference name="SplashScreenDelay" value="2600"/>
   <preference name="ShowSplashScreenSpinner" value="false"/>
-  <icon src="counter-app-icon.png"/>
-  <splash src="counter-app.jpg"/>
-  <platform name="android"/>
+  <plugin name="cordova-plugin-splashscreen"/>
+  <plugin name="cordova-plugin-whitelist" version="1"/>
+  <icon src="img/counter-app-icon.png"/>
+  <splash src="img/counter-app.jpg"/>
+  <access origin="*"/>
+  <allow-intent href="http://*/*"/>
+  <allow-intent href="https://*/*"/>
+  <platform name="android">
+    <allow-intent href="market:*"/>
+  </platform>
 </widget>

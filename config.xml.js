@@ -1,41 +1,20 @@
 const fs = require('fs');
 const pkg = require('./package.json');
-const builder = require('xmlbuilder');
+const _xml = fs.readFileSync('./static/config.xml', 'utf-8');
 
-const root = builder.create('widget')
-    .att('xmlns', 'http://www.w3.org/ns/widgets')
-    .att('xmlns:gap', 'http://phonegap.com/ns/1.0')
-    .att('id', 'com.alterebro.counter-app')
-    .att('version', pkg.version);
+const xml2js = require('xml2js');
+      xml2js.parseString(_xml, (err, res) => {
 
-    const _name = root.ele('name', 'Counter App');
-    const _desc = root.ele('description', pkg.description);
-    const _author = root.ele('author', { 'href' : pkg.author.url }, pkg.author.name);
+        if (err) { throw err; }
 
-    const _apilevel = root.ele('preference', {
-        'name' : 'android-targetSdkVersion',
-        'value' : '28'
+        res.widget.$.version = pkg.version;
+        res.widget.description[0] = pkg.description;
+        res.widget.author[0]._ = pkg.author.name;
+        res.widget.author[0].$.href = pkg.author.url;
+
+        const builder = new xml2js.Builder();
+        const xml = builder.buildObject(res);
+
+        fs.writeFileSync( './static/config.xml', xml );
+        console.log('./static/config.xml file created!')
     });
-
-    const _whitelist = root.ele('plugin', { 'name' : 'cordova-plugin-whitelist', 'version' : '1' });
-
-        const _whitelistPr01 = root.ele('allow-intent', { 'href' : 'http://*/*' });
-        const _whitelistPr02 = root.ele('allow-intent', { 'href' : 'https://*/*' });
-
-    const _splash = root.ele('plugin', { 'name' : 'cordova-plugin-splashscreen' });
-
-        const _splashPr00 = root.ele('preference', { 'name' : 'SplashScreen', 'value' : 'splash' });
-        const _splashPr01 = root.ele('preference', { 'name' : 'SplashMaintainAspectRatio', 'value' : 'true' });
-        const _splashPr02 = root.ele('preference', { 'name' : 'SplashShowOnlyFirstTime', 'value' : 'false' });
-        const _splashPr03 = root.ele('preference', { 'name' : 'AutoHideSplashScreen', 'value' : 'true' });
-        const _splashPr04 = root.ele('preference', { 'name' : 'SplashScreenDelay', 'value' : '2600' });
-        const _splashPr05 = root.ele('preference', { 'name' : 'ShowSplashScreenSpinner', 'value' : 'false' });
-
-    const _icon = root.ele('icon', {'src' : 'counter-app-icon.png'});
-    const _splashScreen = root.ele('splash', { 'src' : 'counter-app.jpg' });
-    const _platform = root.ele('platform', { 'name' : 'android'}, '');
-
-const xml = root.end({ pretty: true});
-
-fs.writeFileSync('./static/config.xml', xml);
-console.log('config.xml file created!');

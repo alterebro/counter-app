@@ -37,11 +37,11 @@
     "parcel-plugin-static-files-copy": "^2.4.3",
     "sass": "^1.26.5",
     "tinytime": "^0.2.6",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "xml2js": "^0.4.23"
   },
   "dependencies": {
     "vue": "^2.6.11",
-    "vue-hot-reload-api": "^2.3.4",
-    "xmlbuilder": "^15.1.1"
+    "vue-hot-reload-api": "^2.3.4"
   }
 }
