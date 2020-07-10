@@ -9,20 +9,19 @@
   <preference name="fullscreen" value="false"/>
   <preference name="android-installLocation" value="auto"/>
   <preference name="android-targetSdkVersion" value="28"/>
-  <preference name="SplashScreen" value="screen"/>
-  <preference name="SplashMaintainAspectRatio" value="true"/>
-  <preference name="SplashShowOnlyFirstTime" value="true"/>
-  <preference name="AutoHideSplashScreen" value="true"/>
-  <preference name="SplashScreenDelay" value="2000"/>
-  <preference name="ShowSplashScreenSpinner" value="false"/>
   <plugin name="cordova-plugin-splashscreen"/>
   <plugin name="cordova-plugin-whitelist" version="1"/>
   <icon src="img/counter-app-icon.png"/>
-  <splash src="img/counter-app.jpg"/>
-  <access origin="*"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <platform name="android">
     <allow-intent href="market:*"/>
+    <preference name="SplashScreen" value="screen"/>
+    <preference name="SplashMaintainAspectRatio" value="true"/>
+    <preference name="SplashShowOnlyFirstTime" value="true"/>
+    <preference name="AutoHideSplashScreen" value="true"/>
+    <preference name="SplashScreenDelay" value="2000"/>
+    <preference name="ShowSplashScreenSpinner" value="false"/>
+    <splash src="img/Default@2x~universal~anyany.png"/>
   </platform>
 </widget>
