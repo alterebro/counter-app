@@ -4,13 +4,11 @@
     "theme_color": "#20325e",
     "background_color": "#20325e",
     "display": "standalone",
-    "start_url": "/?source=pwa",
+    "start_url": "/",
     "scope": "/",
-
     "dir": "ltr",
     "lang": "en",
     "orientation": "any",
-
     "icons": [
       {
         "src": "images/icons/icon-72x72.png",

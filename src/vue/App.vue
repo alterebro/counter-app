@@ -216,6 +216,14 @@ const App = {
     },
     created() {
         this.changeView('/');
+
+        if ('serviceWorker' in navigator) {
+            let swPath = `service-worker.js`;
+            navigator.serviceWorker.register(swPath).then(
+                (registration) => { console.log('ServiceWorker registration successful with scope: ', registration.scope); },
+                (err) => { console.log('ServiceWorker registration failed: ', err); }
+            );
+        }
     }
 };
 
