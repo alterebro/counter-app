@@ -11,8 +11,8 @@
 
         <hr />
         <p>
-            {{ appName }} v{{ appVersion }} &bull; By: <strong><a href="https://twitter.com/alterebro" title="Jorge Moreno. Front End Web Developer and UI Designer" target="_blank">@alterebro</a></strong>
-            <br><strong>Source Code</strong>: <a href="https://github.com/alterebro/counter-app" target="_blank" title="Web Application Source Code">github.com/alterebro/counter-app</a>
+            {{ appName }} v{{ appVersion }} &bull; By: <strong><a href="https://twitter.com/alterebro" title="Jorge Moreno. Front End Web Developer and UI Designer" rel="noreferrer" target="_blank">@alterebro</a></strong>
+            <br><strong>Source Code</strong>: <a href="https://github.com/alterebro/counter-app" target="_blank" rel="noreferrer" title="Web Application Source Code">github.com/alterebro/counter-app</a>
         </p>
     </section>
 </template>
