@@ -4,7 +4,7 @@
         <hr />
 
             <h4>Export and Save database file</h4>
-            <p><a :href="dbURL" download="db.txt" @click.prevent="dbExport()">Export data / Save DB</a></p>
+            <p><a :href="dbURL" download="db.txt" @click="dbExport">Export data / Save DB</a></p>
 
             <h4>Import data file (db.txt)</h4>
             <p><input type="file" @change="dbImport" accept=".txt"></p>
