@@ -184,8 +184,10 @@ const App = {
             }
         },
         itemRemove : function(group, id) {
-            this.db[group].elements.splice(id, 1);
-            this.dbSave();
+            if (window.confirm("Do you really want to remove this item?")) {
+                this.db[group].elements.splice(id, 1);
+                this.dbSave();
+            }
         },
 
         // Groups
