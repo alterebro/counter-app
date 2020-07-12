@@ -4,7 +4,7 @@
     "theme_color": "#20325e",
     "background_color": "#20325e",
     "display": "standalone",
-    "start_url": "/",
+    "start_url": "https://counter-webapp.netlify.app",
     "scope": "/",
     "dir": "ltr",
     "lang": "en",
