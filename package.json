@@ -1,6 +1,6 @@
 {
   "name": "counter-app",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "This is just a counter web application, that simply count things, it doesn't do anything else.",
   "main": "src/main.js",
   "scripts": {
@@ -32,7 +32,9 @@
   "homepage": "https://github.com/alterebro/counter-app#readme",
   "sw-precache": {
     "navigateFallback": "/index.html",
-    "navigateFallbackWhitelist": ["/^\/app\//"]
+    "navigateFallbackWhitelist": [
+      "/^/app//"
+    ]
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.1.2",
