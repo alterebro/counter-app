@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.alterebro.counter_app",
+    "sha256_cert_fingerprints": [
+      "45:C1:B4:7D:13:DB:81:A1:E9:3B:F6:45:F1:43:CA:0B:A8:7A:11:C1:F2:41:E1:9C:3B:81:CC:CF:FC:10:8F:2E"
+    ]
+  }
+}]
