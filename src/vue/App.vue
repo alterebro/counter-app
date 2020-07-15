@@ -49,7 +49,16 @@
             </section>
             <section v-show="counter.start" class="counter-view">
                 <div class="counter-count" @click="counterIncrease()">
-                    {{ counter.count }}
+
+                    <strong>{{ counter.count }}</strong>
+                    <span v-if="counter.count <= 0">
+                        <small >
+                            Click / Tap here
+                            <br>to start counting!
+                        </small>
+                    </span>
+
+
                 </div>
                 <div class="counter-buttons">
                     <button @click="counterStop()"><i class="icon icon-save">Save</i> &nbsp; Stop &amp; Save</button>
@@ -346,14 +355,28 @@ details summary {
 
     .counter-count {
         flex: 1;
-        font-size: 12.8rem;
         user-select: none;
         cursor: pointer;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        text-align: center;
         margin: 1rem 0 0 0;
         border-radius: .5rem;
+        background: #fff;
+        box-shadow: 0 0 25px -10px rgba(0, 0, 0, .15);
+
+        strong {
+            font-size: 12.8rem;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        small {
+            font-size: 90%;
+            color: lighten($colorFg, 25%);
+        }
 
         &:active, &:focus {
             color: #fff;
