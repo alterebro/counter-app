@@ -4,7 +4,7 @@
 
 This is just a counter application, that simply count things, it doesn't do anything else. It lets you create multiple counters and stores the countings in the local storage of the client device. It also can import and export the application data.
 
-Example of a Vue app converted into a Progressive Web Application that can be published on the Google Play Store. The PWA now can be installed on the android device as a WebApp through the website or as a native application through the Play Store.
+Example of a Vue app converted into a Progressive Web Application that can be published on the Google Play Store by using Trusted Web Activities. The PWA now can be installed on the android device as a WebApp through the website or as a native application through the Play Store.
 
 - Online Progressive Web Application : **[counter-webapp.netlify.app](https://counter-webapp.netlify.app/)**
 - Google Play Store App : **[play.google.com/store/apps/details?id=com.alterebro.counter_app](https://play.google.com/store/apps/details?id=com.alterebro.counter_app)**
