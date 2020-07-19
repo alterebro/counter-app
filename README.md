@@ -9,7 +9,7 @@ Example of a Vue app converted into a Progressive Web Application that can be pu
 - Online Progressive Web Application : **[counter-webapp.netlify.app](https://counter-webapp.netlify.app/)**
 - Google Play Store App : **[play.google.com/store/apps/details?id=com.alterebro.counter_app](https://play.google.com/store/apps/details?id=com.alterebro.counter_app)**
 
-<a href="https://play.google.com/store/apps/details?id=com.alterebro.counter_app"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="162" /></a>
+<a href="https://play.google.com/store/apps/details?id=com.alterebro.counter_app"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="162" /></a> <a href="https://github.com/alterebro/counter-app/raw/master/apk/counter-app-0.5.4.apk"><img alt="Get APK from GitHub" src="https://user-images.githubusercontent.com/663460/26973090-f8fdc986-4d14-11e7-995a-e7c5e79ed925.png" width="162" /></a>
 
 ---
 
